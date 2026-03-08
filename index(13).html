@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2d1b4e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MAXIM ACAAN</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    
+    <!-- iOS Splash Screens -->
+    <link rel="apple-touch-startup-image" href="splash-2436x1125.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="splash-2732x2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+    
+    <link rel="stylesheet" href="timer.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Arial, sans-serif;
+            background: #2d1b4e;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(1px 1px at 15% 25%, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 85% 15%, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 45% 85%, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 75% 45%, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 25% 65%, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 95% 85%, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 55% 35%, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 35% 95%, rgba(255, 255, 255, 0.3), transparent);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 414px;
+            padding: 40px 30px;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .logo-circle {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #e84a5f 0%, #c83e51 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 50px rgba(232, 74, 95, 0.5);
+        }
+
+        .logo-circle .letter {
+            font-size: 52px;
+            font-weight: 900;
+            color: white;
+        }
+
+        .app-name {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 10px;
+            color: white;
+        }
+
+        .perform-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(232, 74, 95, 0.4);
+            transition: all 0.2s;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        .perform-button:active {
+            transform: scale(0.97);
+            box-shadow: 0 5px 20px rgba(232, 74, 95, 0.5);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 8px 0 8px 14px;
+            border-color: transparent transparent transparent white;
+            margin-left: 3px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        .menu-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            border: none;
+            border-radius: 18px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(232, 74, 95, 0.35);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .menu-item:active {
+            transform: scale(0.95);
+        }
+
+        .menu-item:active::before {
+            opacity: 1;
+        }
+
+        .menu-icon {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .menu-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            opacity: 0.95;
+            text-align: center;
+        }
+
+        /* Perform Screen Styles */
+        .perform-screen {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .perform-screen.active {
+            display: block;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 5px;
+            margin-right: 15px;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .back-button:active {
+            transform: scale(0.9);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .card-selector-section {
+            margin-bottom: 25px;
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .suits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .suit-button {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .suit-button:active {
+            transform: scale(0.9);
+        }
+
+        .suit-button.selected {
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            border-color: #e84a5f;
+            box-shadow: 0 5px 20px rgba(232, 74, 95, 0.4);
+        }
+
+        .ranks-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .rank-button {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .rank-button:active {
+            transform: scale(0.9);
+        }
+
+        .rank-button.selected {
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            border-color: #e84a5f;
+            box-shadow: 0 5px 15px rgba(232, 74, 95, 0.4);
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(232, 74, 95, 0.4);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-button:active {
+            transform: scale(0.97);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .selected-card-display {
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(232, 74, 95, 0.5);
+        }
+
+        .selected-card-display h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .selected-card-display p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .reveal-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .reveal-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .reveal-card h3 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reveal-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .reveal-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 12px 0;
+        }
+
+        .reveal-instruction {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .timer-launch-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff9f0a 0%, #ff8c00 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .timer-launch-btn:active {
+            transform: scale(0.97);
+        }
+
+        .timer-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .timer-display .time {
+            font-size: 36px;
+            font-weight: 700;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .timer-btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timer-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(232, 74, 95, 0.6);
+            z-index: 1000;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Settings Screen */
+        .settings-screen {
+            display: none;
+        }
+
+        .settings-screen.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .settings-group {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .settings-group h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #e84a5f;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #e84a5f;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        select option {
+            background: #2d1b4e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div id="notification" class="notification"></div>
+
+        <!-- Main Screen -->
+        <div id="mainScreen" class="screen active" style="display: flex; flex-direction: column; height: 100vh; padding: 20px;">
+            <div class="logo-section" style="flex-shrink: 0; margin-bottom: 20px;">
+                <div class="logo-circle">
+                    <span class="letter">M</span>
+                </div>
+                <div class="app-name">MAXIM ACAAN</div>
+            </div>
+
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0;">
+                <button class="perform-button" onclick="showTimerFirst()" style="margin-bottom: 20px;">
+                    <div class="play-icon"></div>
+                    <span>Ejecutar</span>
+                </button>
+
+                <div class="menu-grid" style="grid-template-columns: 1fr;">
+                    <button class="menu-item" onclick="showScreen('settingsScreen')">
+                        <div class="menu-icon">⚙️</div>
+                        <div class="menu-label">Ajustes</div>
+                    </button>
+                </div>
+            </div>
+
+            <div style="flex-shrink: 0; text-align: center; opacity: 0.7; font-size: 14px; padding-top: 20px;">
+                <div id="currentStackDisplay" style="margin-bottom: 8px;">
+                    Stack: <span id="stackNameHome">Mnemonica</span>
+                </div>
+                <div style="opacity: 0.5; font-size: 12px;">
+                    Créditos: T.P.
+                </div>
+            </div>
+        </div>
+
+        <!-- Perform Screen - Step 1: Select Suit -->
+        <div id="performScreen" class="perform-screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Selecciona Palo</div>
+            </div>
+
+            <div class="card-selector-section">
+                <div class="section-label">Palo</div>
+                <div class="suits-grid">
+                    <button class="suit-button" onclick="selectSuitAndNext('hearts')">♥</button>
+                    <button class="suit-button" onclick="selectSuitAndNext('diamonds')">♦</button>
+                    <button class="suit-button" onclick="selectSuitAndNext('clubs')">♣</button>
+                    <button class="suit-button" onclick="selectSuitAndNext('spades')">♠</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Perform Screen - Step 2: Select Rank -->
+        <div id="rankScreen" class="perform-screen">
+            <div class="header">
+                <button class="back-button" onclick="showPerformScreen()">←</button>
+                <div class="header-title">Selecciona Valor</div>
+            </div>
+
+            <div class="card-selector-section">
+                <div class="section-label">Valor</div>
+                <div class="ranks-grid">
+                    <button class="rank-button" onclick="selectRankAndCalculate('A')">A</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('2')">2</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('3')">3</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('4')">4</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('5')">5</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('6')">6</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('7')">7</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('8')">8</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('9')">9</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('10')">10</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('J')">J</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('Q')">Q</button>
+                    <button class="rank-button" onclick="selectRankAndCalculate('K')">K</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Card Screen - Step 3: After Timer -->
+        <div id="keyCardSuitScreen" class="perform-screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Selecciona Palo</div>
+            </div>
+
+            <div class="card-selector-section">
+                <div class="section-label">Palo</div>
+                <div class="suits-grid">
+                    <button class="suit-button" onclick="selectKeySuitAndNext('hearts')">♥</button>
+                    <button class="suit-button" onclick="selectKeySuitAndNext('diamonds')">♦</button>
+                    <button class="suit-button" onclick="selectKeySuitAndNext('clubs')">♣</button>
+                    <button class="suit-button" onclick="selectKeySuitAndNext('spades')">♠</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Card Screen - Step 4: Select Key Rank -->
+        <div id="keyCardRankScreen" class="perform-screen">
+            <div class="header">
+                <button class="back-button" onclick="showScreen('keyCardSuitScreen')">←</button>
+                <div class="header-title">Selecciona Valor</div>
+            </div>
+
+            <div class="card-selector-section">
+                <div class="section-label">Valor</div>
+                <div class="ranks-grid">
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('A')">A</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('2')">2</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('3')">3</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('4')">4</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('5')">5</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('6')">6</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('7')">7</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('8')">8</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('9')">9</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('10')">10</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('J')">J</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('Q')">Q</button>
+                    <button class="rank-button" onclick="selectKeyRankAndCalculate('K')">K</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="results-screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Revelaciones</div>
+            </div>
+
+            <div style="height: calc(100vh - 80px); overflow-y: auto; padding-bottom: 40px;">
+                <div class="selected-card-display">
+                    <h2 id="selectedCardName"></h2>
+                </div>
+
+                <div class="reveal-methods" id="revealMethods"></div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Ajustes</div>
+            </div>
+
+            <div style="padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
+                <div class="settings-group">
+                    <h3>Tipo de Stack</h3>
+                    <select id="stackType" onchange="changeStack()">
+                        <option value="mnemonica">Mnemonica (Tamariz)</option>
+                        <option value="aronson">Aronson Stack</option>
+                        <option value="eight-kings">Eight Kings</option>
+                        <option value="si-stebbins">Si Stebbins</option>
+                    </select>
+                    
+                    <button onclick="showScreen('stackScreen')" style="
+                        margin-top: 15px;
+                        width: 100%;
+                        padding: 15px;
+                        background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+                        border: none;
+                        border-radius: 12px;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Ver Stack Completo</button>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Modo Detener Timer</h3>
+                    <select id="stopMode" onchange="changeStopMode()">
+                        <option value="1">Modo 1: Detener directo</option>
+                        <option value="2">Modo 2: Parar sonido primero</option>
+                    </select>
+                    <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">
+                        Modo 1: Al detener va directo a siguiente pantalla<br>
+                        Modo 2: Primera vez para sonido, segunda vez continúa
+                    </p>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Static Outs</h3>
+                    <button onclick="showScreen('editOutsScreen')" style="
+                        width: 100%;
+                        padding: 15px;
+                        background: linear-gradient(135deg, #c83e51 0%, #e84a5f 100%);
+                        border: none;
+                        border-radius: 12px;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Editar Static Outs</button>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Dynamic Outs</h3>
+                    
+                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" id="dynSumaMinutos" onchange="toggleDynamicOut('sumaMinutos')" style="margin-right: 10px;">
+                        <span>Suma de Minutos</span>
+                    </label>
+                    
+                    <div id="sumaMinutosConfig" style="margin-left: 25px; margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                        <p style="font-size: 11px; opacity: 0.7; margin-bottom: 10px;">Elige UNA opción:</p>
+                        
+                        <label style="display: block; font-size: 12px; margin-bottom: 8px;">
+                            <strong>Opción A:</strong> Si faltan menos de
+                            <input type="number" id="adelantarSi" value="12" min="0" max="59" 
+                                onchange="updateDynamicConfig('sumaMinutos', 'adelantarSi', this.value)"
+                                style="width: 50px; margin: 0 3px; padding: 4px; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                            segs → Adelanta <strong>1 minuto</strong>
+                            <span style="font-size: 10px; opacity: 0.6; display: block; margin-top: 3px;">
+                                (Poner 0 para desactivar)
+                            </span>
+                        </label>
+                        
+                        <label style="display: block; font-size: 12px; margin-top: 8px;">
+                            <strong>Opción B:</strong> Adelantar siempre
+                            <input type="number" id="adelantarMinutos" value="0" min="0" max="10"
+                                onchange="updateDynamicConfig('sumaMinutos', 'adelantarMinutos', this.value)"
+                                style="width: 50px; margin: 0 3px; padding: 4px; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                            minutos
+                            <span style="font-size: 10px; opacity: 0.6; display: block; margin-top: 3px;">
+                                (Poner 0 para desactivar)
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" id="dynLetrasNombre" onchange="toggleDynamicOut('letrasNombre')" style="margin-right: 10px;">
+                        <span>Letras del Nombre</span>
+                    </label>
+                    
+                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" id="dynSumaFecha" onchange="toggleDynamicOut('sumaFecha')" style="margin-right: 10px;">
+                        <span>Suma de Fecha</span>
+                    </label>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Opciones de Revelación</h3>
+                    <div class="setting-item">
+                        <span>Revelación por Fecha</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dateReveal" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Revelación por Deletreo</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="spellingReveal" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Revelación por Cumpleaños</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="birthdayReveal" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Función Temporizador</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="timerFeature" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Notificaciones</h3>
+                    <div class="setting-item">
+                        <span>Vibración</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="vibrationOn" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Outs Screen -->
+        <div id="editOutsScreen" class="screen">
+            <div class="header">
+                <button class="back-button" onclick="showScreen('settingsScreen')">←</button>
+                <div class="header-title">Editar Static Outs</div>
+            </div>
+
+            <div style="height: calc(100vh - 140px); overflow-y: auto; padding: 20px;">
+                <div id="outsEditor"></div>
+                
+                <button onclick="resetStaticOuts()" style="
+                    width: 100%;
+                    padding: 15px;
+                    margin-top: 20px;
+                    background: linear-gradient(135deg, #666 0%, #888 100%);
+                    border: none;
+                    border-radius: 12px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                ">Restaurar Valores por Defecto</button>
+            </div>
+        </div>
+
+        <!-- Stack Screen -->
+        <div id="stackScreen" class="screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Stack</div>
+            </div>
+            
+            <div style="padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
+                <h3 id="currentStackName" style="margin-bottom: 15px; color: #ffffff;">Mnemonica (Tamariz)</h3>
+                <div id="stackCardsList" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                    <!-- Las cartas se generarán aquí -->
+                </div>
+            </div>
+        </div>
+
+        <div id="infoScreen" class="screen">
+            <div class="header">
+                <button class="back-button" onclick="showMainScreen()">←</button>
+                <div class="header-title">Información</div>
+            </div>
+            <div class="settings-group">
+                <h3>Acerca de MAXIM</h3>
+                <p style="line-height: 1.6; opacity: 0.9;">MAXIM es una aplicación de revelación de cartas diseñada para magos profesionales. Calcula revelaciones perfectas usando stacks memorizados.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./timer.js?v=17"></script>
+    <script src="./app.js?v=17"></script>
+</body>
+</html>
+
+<style>
+/* CRITICAL: Pantallas separadas REALES */
+.perform-screen,
+.results-screen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: #2d1b4e !important;
+    z-index: 1000 !important;
+    display: none !important;
+}
+
+.perform-screen.active,
+.results-screen.active {
+    display: flex !important;
+    flex-direction: column !important;
+}
+</style>
